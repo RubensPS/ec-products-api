@@ -6,6 +6,8 @@ import com.letscode.ecproductsapi.domain.ProductResponse;
 import com.letscode.ecproductsapi.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class ProductService {
     private final ProductRepository repository;
@@ -18,5 +20,10 @@ public class ProductService {
         ProductEntity entity = request.toEntity();
         ProductResponse response = new ProductResponse(repository.save(entity));
         return response;
+    }
+
+    public BigDecimal getPriceById(String id) {
+        ProductEntity productEntity = repository.findById(id).orElseThrow();
+        return productEntity.getPrice();
     }
 }

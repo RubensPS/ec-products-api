@@ -22,4 +22,5 @@ public class ProductRequest {
                 this.supply,
                 this.price);
     }
+
 }
