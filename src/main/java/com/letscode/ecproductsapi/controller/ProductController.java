@@ -22,10 +22,16 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/price/{id}")
+    @GetMapping("/get/price/{productId}")
     public ResponseEntity<BigDecimal> getPriceByProductId(@PathVariable String id) {
         BigDecimal productPrice = productService.getPriceById(id);
         return ResponseEntity.ok(productPrice);
+    }
+
+    @GetMapping("/get/{productId}")
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable String productId) {
+        ProductResponse response = productService.getProduct(productId);
+        return ResponseEntity.ok(response);
     }
 
 }

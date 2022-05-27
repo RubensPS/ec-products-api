@@ -26,4 +26,10 @@ public class ProductService {
         ProductEntity productEntity = repository.findById(id).orElseThrow();
         return productEntity.getPrice();
     }
+
+    public ProductResponse getProduct(String productId) {
+        ProductEntity productEntity = repository.findById(productId).orElseThrow();
+        ProductResponse response = new ProductResponse(productEntity);
+        return response;
+    }
 }
