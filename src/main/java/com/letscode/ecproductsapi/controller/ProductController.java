@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -23,8 +24,8 @@ public class ProductController {
     }
 
     @GetMapping("/get/price/{productId}")
-    public ResponseEntity<BigDecimal> getPriceByProductId(@PathVariable String id) {
-        BigDecimal productPrice = productService.getPriceById(id);
+    public ResponseEntity<BigDecimal> getPriceByProductId(@PathVariable String productId) {
+        BigDecimal productPrice = productService.getPriceById(productId);
         return ResponseEntity.ok(productPrice);
     }
 
@@ -32,6 +33,16 @@ public class ProductController {
     public ResponseEntity<ProductResponse> getProductById(@PathVariable String productId) {
         ProductResponse response = productService.getProduct(productId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+
+    @DeleteMapping("/remove/{productId}")
+    public ResponseEntity<String> deleteProductById(@PathVariable String productId) {
+        return productService.deleteProduct(productId);
     }
 
 }
