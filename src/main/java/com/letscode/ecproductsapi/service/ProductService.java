@@ -4,6 +4,7 @@ import com.letscode.ecproductsapi.domain.ProductEntity;
 import com.letscode.ecproductsapi.domain.ProductRequest;
 import com.letscode.ecproductsapi.domain.ProductResponse;
 import com.letscode.ecproductsapi.repository.ProductRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +21,14 @@ public class ProductService {
         this.repository = repository;
     }
 
-    public ProductResponse addProduct(ProductRequest request) {
+    public ResponseEntity<ProductResponse> addProduct(ProductRequest request) {
+        Optional<ProductEntity> entityCheck = repository.findByName(request.getName());
+        if (entityCheck.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
         ProductEntity entity = request.toEntity();
         ProductResponse response = new ProductResponse(repository.save(entity));
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     public BigDecimal getPriceById(String id) {

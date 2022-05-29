@@ -19,8 +19,7 @@ public class ProductController {
 
     @PostMapping("/add")
     public ResponseEntity<ProductResponse> addNewProduct(@RequestBody ProductRequest request) {
-        ProductResponse response = productService.addProduct(request);
-        return ResponseEntity.ok(response);
+        return productService.addProduct(request);
     }
 
     @GetMapping("/get/price/{productId}")
