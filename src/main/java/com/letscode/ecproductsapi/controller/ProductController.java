@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -47,6 +48,11 @@ public class ProductController {
     @GetMapping("/supply/{cartId}")
     public ResponseEntity<Boolean> checkCartSupply(@PathVariable String cartId) {
         return productService.checkSupply(cartId);
+    }
+
+    @PatchMapping("/supply/products")
+    public ResponseEntity<String> subtractSupplyfromSale(@RequestBody HashMap<String, Long> products) {
+        return productService.subtractSupply(products);
     }
 
 }

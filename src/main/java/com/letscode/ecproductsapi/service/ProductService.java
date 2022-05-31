@@ -72,4 +72,13 @@ public class ProductService {
         return ResponseEntity.ok(checkProduct);
     }
 
+    public ResponseEntity<String> subtractSupply(HashMap<String, Long> products) {
+        products.forEach((k, v) -> {
+            Optional<ProductEntity> entity = repository.findById(k);
+            entity.get().setSupply(entity.get().getSupply() - v);
+            repository.save(entity.get());
+        });
+        return ResponseEntity.ok().build();
+    }
+
 }
