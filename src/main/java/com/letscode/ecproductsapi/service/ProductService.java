@@ -1,24 +1,27 @@
 package com.letscode.ecproductsapi.service;
 
+import com.letscode.ecproductsapi.domain.ProductCartEntity;
 import com.letscode.ecproductsapi.domain.ProductEntity;
 import com.letscode.ecproductsapi.domain.ProductRequest;
 import com.letscode.ecproductsapi.domain.ProductResponse;
+import com.letscode.ecproductsapi.gateway.CartGateway;
 import com.letscode.ecproductsapi.repository.ProductRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
     private final ProductRepository repository;
+    private final CartGateway cartGateway;
 
-    public ProductService (ProductRepository repository) {
+    public ProductService (ProductRepository repository, CartGateway cartGateway) {
         this.repository = repository;
+        this.cartGateway = cartGateway;
     }
 
     public ResponseEntity<ProductResponse> addProduct(ProductRequest request) {
@@ -58,4 +61,15 @@ public class ProductService {
         repository.deleteById(entity.get().getId());
         return ResponseEntity.ok("Product DELETE successfully.");
     }
+
+    public ResponseEntity<Boolean> checkSupply(String cartId) {
+        ProductCartEntity cartEntity = cartGateway.getCart(cartId).getBody();
+        Set<String> products = cartEntity.getProducts().keySet();
+        Boolean checkProduct = cartEntity.getProducts().size() == products.stream().map(p -> repository.findById(p).get().getSupply().compareTo(cartEntity.getProducts().get(p)) >= 0 ? true : false).filter(t -> t.equals(true)).toList().size();
+        if(!checkProduct) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
+        return ResponseEntity.ok(checkProduct);
+    }
+
 }

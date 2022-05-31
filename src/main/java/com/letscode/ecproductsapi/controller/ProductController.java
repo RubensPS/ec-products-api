@@ -44,4 +44,9 @@ public class ProductController {
         return productService.deleteProduct(productId);
     }
 
+    @GetMapping("/supply/{cartId}")
+    public ResponseEntity<Boolean> checkCartSupply(@PathVariable String cartId) {
+        return productService.checkSupply(cartId);
+    }
+
 }
